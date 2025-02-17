@@ -1,7 +1,8 @@
 package org.example.simplemvc.services;
 
 import org.example.simplemvc.models.User;
-import org.example.simplemvc.models.UserRepository;
+import org.example.simplemvc.payloads.UserDTO;
+import org.example.simplemvc.repos.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +28,17 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void addUser(User user) {
-        Optional<User> userByEmail = userRepository.findByEmail(user.getEmail());
 
-        if (userByEmail.isPresent()) {
-            log.info("User with email {} already exists", user.getEmail());
+    public boolean registerUser(UserDTO userDTO) {
+
+        if(userRepository.existsByEmail(userDTO.getEmail())) {
+            log.info("User with email {} already exists", userDTO.getEmail());
         }
 
+        User user = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword());
         userRepository.save(user);
+        return true;
+
     }
 
     public void deleteUser(Integer id) {
@@ -44,5 +48,7 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+
 
 }
