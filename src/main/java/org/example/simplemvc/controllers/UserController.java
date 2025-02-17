@@ -19,10 +19,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
-    }
-
     @GetMapping
     public String getUsers(Model model) {
         List<User> users = userService.findAllUsers();
