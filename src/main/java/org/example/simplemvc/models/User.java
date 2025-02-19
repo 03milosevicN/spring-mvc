@@ -1,7 +1,6 @@
 package org.example.simplemvc.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -12,10 +11,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Column(nullable = false)
     @Size(min = 2, max = 50)
-    //@Pattern(regexp = "^[a-zA-Z]$", message="Name must not contain special characters!")
     private String name;
 
     @Column(unique =  true, nullable = false)

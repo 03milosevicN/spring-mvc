@@ -1,6 +1,5 @@
 package org.example.simplemvc.controllers;
 
-import org.example.simplemvc.models.User;
 import org.example.simplemvc.payloads.UserDTO;
 import org.example.simplemvc.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +29,27 @@ public class AuthController {
      * @return name of view template for "login.html".
      */
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("user", new UserDTO());
         return "login";
     }
+
+    /**
+     * @param userDTO : DTO of entity User
+     * @param model : hold Model attributes
+     * @return redirection to view template for "success.html"
+     */
+    @PostMapping("/login")
+    public String processLogin(@ModelAttribute("user") UserDTO userDTO, Model model) {
+
+        if (!userService.validateLogin(userDTO.getEmail(), userDTO.getPassword())) {
+            model.addAttribute("error", "Invalid email or password");
+            return "login";
+        }
+
+        return "redirect:/success";
+    }
+
 
     /**
      * Handles GET request for "register.html".
@@ -44,19 +61,22 @@ public class AuthController {
         return "register";
     }
 
+    /**
+     * @param userDTO :  DTO of entity User
+     * @param model : hold Model attributes
+     * @return redirect to success page if successfully added to database.
+     */
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("user") UserDTO userDTO, Model model) {
 
-        boolean isRegistered = userService.registerUser(userDTO);
-
-        if (!isRegistered) {
+        if (!userService.registerUser(userDTO)) {
             model.addAttribute("error", "User with email " + userDTO.getEmail() + " already exists");
             return "register";
         }
 
-        return "redirect:/success";
-
+        return "redirect:/login";
     }
+
 
     /**
      * Temporary solution for a successful registration

@@ -9,9 +9,33 @@
 </head>
 <body>
 
-    <main>
+    <!--TEST FEATURE-->
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <!--TEST FEATURE-->
 
-    </main>
+    <form th:action="@{/login}" th:object="${user}" method="post">
+        <div class="input-group mb-3">
+            <label for="input-email">Email</label>
+            <input class="form-control" type="email" th:field="*{email}" id="input-email" required/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="input-password">Password</label>
+            <input class="form-control"  type="password" th:field="*{password}" id="input-password" required />
+        </div>
+
+        <button class="btn btn-primary">Log in</button>
+    </form>
+
+    <!--TEST FEATURE-->
+    <form th:action="@{/logout}" method="post">
+        <button class="btn btn-primary">Log out</button>
+    </form>
+<!--    &lt;!&ndash;TEST FEATURE&ndash;&gt;-->
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
