@@ -10,17 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+//    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+//        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @GetMapping
@@ -28,17 +30,40 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
+    /**
+     *
+     * @param userDTO : DTO of model User
+     * @return true if UserDTO's e-mail isn't already present in the database
+     */
     public boolean registerUser(UserDTO userDTO) {
 
         if(userRepository.existsByEmail(userDTO.getEmail())) {
             log.info("User with email {} already exists", userDTO.getEmail());
+            return false;
         }
 
         User user = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword());
         userRepository.save(user);
         return true;
 
+    }
+
+    /**
+     *
+     * @param email : User's email
+     * @param password : User's password
+     * @return true if acquired password matches password in database
+     */
+    public boolean validateLogin(String email, String password) {
+
+        User user = userRepository.findByEmail(email);
+
+        if(user == null) {
+            log.info("User with email {} does not exist", email);
+            return false;
+        }
+
+        return user.getPassword().equals(password);
     }
 
     public void deleteUser(Integer id) {
