@@ -42,7 +42,7 @@ public class UserService {
             return false;
         }
 
-        User user = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword());
+        User user = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword(), userDTO.getRole());
         userRepository.save(user);
         return true;
 
