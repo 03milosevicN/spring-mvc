@@ -3,6 +3,8 @@ package org.example.simplemvc.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @Table
 public class User {
@@ -25,6 +27,15 @@ public class User {
 
     @Column(nullable = false)
     private Integer role;
+
+    @ManyToMany
+    @JoinTable(
+            name="user_transaction",
+            joinColumns= @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="transaction_id")
+    )
+    private List<Transactions> transactions;
+
 
     public User() {}
 
@@ -63,7 +74,9 @@ public class User {
     public Integer getRole() { return role; }
 
     public void setRole(Integer role) { this.role = role; }
-    
+
+    public List<Transactions> getTransactions() { return transactions; }
+    public void setTransactions(List<Transactions> transactions) { this.transactions = transactions; }
 
     @Override
     public String toString() {
