@@ -47,6 +47,10 @@ public class AuthController {
             return "login";
         }
 
+        if (userDTO.getRole() == 1) {
+            // TODO: add role-based redirection.
+        }
+
         return "redirect:/success";
     }
 

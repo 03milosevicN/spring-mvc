@@ -3,6 +3,8 @@ package org.example.simplemvc.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @Table
 public class User {
@@ -23,19 +25,33 @@ public class User {
     @Size(min = 8, max = 50)
     private String password;
 
+    @Column(nullable = false)
+    private Integer role;
+
+    @ManyToMany
+    @JoinTable(
+            name="user_transaction",
+            joinColumns= @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="transaction_id")
+    )
+    private List<Transactions> transactions;
+
+
     public User() {}
 
-    public User(Integer id, String name, String email, String password) {
+    public User(Integer id, String name, String email, String password, Integer role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, Integer role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = 0;
     }
 
 
@@ -54,6 +70,13 @@ public class User {
     public String getPassword() { return password; }
 
     public void setPassword(String password) { this.password = password; }
+
+    public Integer getRole() { return role; }
+
+    public void setRole(Integer role) { this.role = role; }
+
+    public List<Transactions> getTransactions() { return transactions; }
+    public void setTransactions(List<Transactions> transactions) { this.transactions = transactions; }
 
     @Override
     public String toString() {
