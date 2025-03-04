@@ -1,6 +1,8 @@
 package org.example.simplemvc.controllers;
 
+import org.example.simplemvc.models.User;
 import org.example.simplemvc.payloads.UserDTO;
+import org.example.simplemvc.repos.UserRepository;
 import org.example.simplemvc.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +18,13 @@ import java.util.List;
 @RequestMapping
 public class AuthController {
 
+    private final UserRepository userRepository;
     private UserService userService;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -47,11 +51,16 @@ public class AuthController {
             return "login";
         }
 
+        User user = userRepository.findByEmail(userDTO.getEmail());
+        userDTO.setRole(user.getRole());
+
         if (userDTO.getRole() == 1) {
-            // TODO: add role-based redirection.
+            System.out.println("Will eventually re-direct to dashboard!");
+            return "redirect:/users";
         }
 
-        return "redirect:/success";
+        System.out.println("Will eventually re-direct to main page for users");
+        return "redirect:/";
     }
 
 
